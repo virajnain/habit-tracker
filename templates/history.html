@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habit Tracker - History</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 700px; 
+            margin: 40px auto; 
+        }
+        h1 { text-align: center; }
+        .nav { text-align: center; margin-bottom: 20px; }
+        .nav a { margin: 0 10px; text-decoration: none; color: #007BFF; }
+        .day { 
+            margin-bottom: 25px; 
+            background: #f9f9f9; 
+            padding: 15px; 
+            border-radius: 10px; 
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        .day h2 { margin-bottom: 5px; }
+        .summary { font-weight: bold; margin-bottom: 10px; }
+        .done { color: green; }
+        .missed { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Habit History</h1>
+    <div class="nav">
+        <a href="/">Home</a> |
+        <a href="/manage">Manage</a> |
+        <a href="/history">History</a>
+    </div>
+
+    {% for d, data in history %}
+    <div class="day">
+        <h2>{{ d }}</h2>
+        <div class="summary">Completed: {{ data['count'] }}</div>
+
+        {% for h in data['done'] %}
+            <div class="done">✓ {{ h }}</div>
+        {% endfor %}
+        {% for h in data['missed'] %}
+            <div class="missed">✗ {{ h }}</div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</body>
+</html>
+

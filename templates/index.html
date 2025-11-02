@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habit Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; }
+        h1 { text-align: center; }
+        .nav { text-align: center; margin-bottom: 20px; }
+        .nav a { margin: 0 10px; text-decoration: none; color: #007BFF; }
+        form { display: inline; }
+        button { padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; }
+        .done { background-color: #4CAF50; color: white; }
+        .undone { background-color: #f0f0f0; }
+        li { margin-bottom: 10px; list-style: none; }
+        .date-form { text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Habit Tracker</h1>
+    <div class="nav">
+        <a href="/">Home</a> |
+        <a href="/manage">Manage</a> |
+        <a href="/history">History</a>
+    </div>
+
+    <div class="date-form">
+        <form method="GET" action="/">
+            <label for="date">Select date:</label>
+            <input type="date" id="date" name="date" value="{{ selected_date }}">
+            <button type="submit">View</button>
+        </form>
+    </div>
+
+    <h3 style="text-align:center;">Habits for {{ selected_date }}</h3>
+
+    <ul>
+        {% for habit in habits %}
+        <li>
+            <span>{{ habit[1] }}</span>
+            {% if habit[0] in completed %}
+                <form method="POST" action="/uncomplete/{{ habit[0] }}">
+                    <input type="hidden" name="date" value="{{ selected_date }}">
+                    <button class="done">✓ Done</button>
+                </form>
+            {% else %}
+                <form method="POST" action="/complete/{{ habit[0] }}">
+                    <input type="hidden" name="date" value="{{ selected_date }}">
+                    <button class="undone">Mark Done</button>
+                </form>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

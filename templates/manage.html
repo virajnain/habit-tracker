@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habit Tracker - Manage</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; }
+        h1 { text-align: center; }
+        .nav { text-align: center; margin-bottom: 20px; }
+        .nav a { margin: 0 10px; text-decoration: none; color: #007BFF; }
+        ul { list-style: none; padding: 0; }
+        li { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        input[type=text] { padding: 5px; }
+        button { padding: 5px 10px; }
+    </style>
+</head>
+<body>
+    <h1>Manage Habits</h1>
+    <div class="nav">
+        <a href="/">Home</a> |
+        <a href="/manage">Manage</a> |
+        <a href="/history">History</a>
+    </div>
+
+    <form method="POST">
+        <input type="text" name="name" placeholder="New habit..." required>
+        <button type="submit" name="add">Add</button>
+    </form>
+
+    <ul>
+        {% for habit in habits %}
+        <li>
+            <span>{{ habit[1] }}</span>
+            <form method="POST">
+                <button type="submit" name="delete" value="{{ habit[0] }}">Delete</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
