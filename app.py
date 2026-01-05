@@ -4,9 +4,6 @@ from datetime import date
 
 app = Flask(__name__)
 
-# ----------------------------
-# Database setup
-# ----------------------------
 def init_db():
     conn = sqlite3.connect('habits.db')
     cursor = conn.cursor()
@@ -29,10 +26,6 @@ def init_db():
 
 init_db()
 
-# ----------------------------
-# Routes
-# ----------------------------
-
 @app.route('/')
 def index():
     """Home: show all habits and allow marking completions for a chosen date"""
@@ -41,11 +34,9 @@ def index():
     conn = sqlite3.connect('habits.db')
     cursor = conn.cursor()
 
-    # Fetch all habits
     cursor.execute('SELECT id, name FROM habits')
     habits = cursor.fetchall()
 
-    # Fetch completed habits for selected date
     cursor.execute('SELECT habit_id FROM completions WHERE date = ?', (selected_date,))
     completed = {row[0] for row in cursor.fetchall()}
 
@@ -112,23 +103,19 @@ def history():
     conn = sqlite3.connect('habits.db')
     cursor = conn.cursor()
 
-    # Fetch all habits
     cursor.execute('SELECT id, name FROM habits')
     habits = cursor.fetchall()
     habit_dict = {h[0]: h[1] for h in habits}
     total_habits = len(habit_dict)
 
-    # Fetch all completions
     cursor.execute('SELECT habit_id, date FROM completions')
     completions = cursor.fetchall()
     conn.close()
 
-    # Map date -> set of completed habit names
     completed_by_day = {}
     for habit_id, d in completions:
         completed_by_day.setdefault(d, set()).add(habit_dict[habit_id])
 
-    # Generate all days from Nov 1 to today
     start_date = date(2025, 11, 1)
     end_date = date.today()
     delta = timedelta(days=1)
@@ -146,11 +133,9 @@ def history():
         }
         current += delta
 
-    # Sort newest first
     sorted_history = sorted(history_dict.items(), reverse=True)
 
     return render_template('history.html', history=sorted_history)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
